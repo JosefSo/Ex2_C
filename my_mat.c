@@ -2,105 +2,63 @@
 #include<math.h>
 #include "my_mat.h"
 
-typedef enum { false, true } boolean;
-
-#define MIN(a,b) (((a)<(b))?(a):(b))
-
-#define INFINITY HUGE_VALF
-
-#define ROWS 10
-#define COLS 10
+#define MAXROW      10
+#define MAXCOL      10
 
 
-/**
- * Function to take input in two dimensional array (matrix) 
- * from user.
- *
- * @matrix  2D array to store input.
- * @rows    Total rows in 2D matrix.
- * @cols    Total columns in 2D matrix.
- */
-void scanMatrix(int matrix[][10]){
-
-    int i, j;
-    for(int i = 0; i < 10; i++)
+void scanMatrix(int matrix[MAXROW][MAXCOL]){
+    int i,j,r,c;
+    printf("Enter number of Rows :");
+    scanf("%d",&r);
+    printf("Enter number of Cols :");
+    scanf("%d",&c);
+ 
+    printf("\nEnter matrix elements :\n");
+    for(i=0;i< r;i++)
     {
-        for(int j = 0; j < 10; j++)
+        for(j=0;j< c;j++)
         {
-            // (*(matrix + i) + j is equivalent to &matrix[i][j]
-            scanf("%d", (*(matrix + i) + j));
-            if (i != j && matrix[i][j] == 0){
-                matrix[i][j] == INFINITY;
-            }
-
+            printf("Enter element [%d,%d] : ",i+1,j+1);
+            scanf("%d",&matrix[i][j]);
         }
     }
-
-}
-
-int isExistsPath(int v1, int v2, int matrix[][10]){
-    int ans = shortestPath(v1, v2, matrix)
-    if (ans == -1){
-        return 0;
+ 
+    printf("\nMatrix is :\n");
+    for(i=0;i< r;i++)
+    {
+        for(j=0;j< c;j++)
+        {
+            printf("%d\t",matrix[i][j]);
+        }
+        printf("\n");   /*new line after row elements*/
     }
+}
+int isExistsPath(){
     return 1;
 }
 
-int shortestPath(int p1, int p2, int matrix[][COLS]){
+
+
+int shortestPath2V(int matrix[MAXROW][MAXCOL],int v1,int v2){
     for(int k = 0; k<10; k++){
         for (int i = 0; i<10; i++){
             for (int j = 0; j<10; j++){
-                matrix[i][j] = MIN(matrix[i][j], matrix[i][k]+matrix[k][j]);
-                matrix[j][i] = matrix[i][j];
+                if(matrix[i][k]!=0&&matrix[k][j]!=0)
+                {
+                     if(matrix[i][j] > matrix[i][k]+matrix[k][j]);
+                        matrix[i][j] = matrix[i][k] + matrix[k][j];
+                }
             }
         }
     }
-    if (matrix[p1][p2] == INFINITY){
+    if (matrix[v1][v2] == 0){
         return -1;
-    }
-    return matrix[p1][p2];
+    return matrix[v1][v2];
 }
-
-int main()
+int shortestPath(int matrix[MAXROW][MAXCOL])
 {
-    int matrix[10][10];
-    int i, j;
-
-    /* Input elements in matrix */
-    printf("Enter elements in %dx%d matrix.\n", 10, 10);
-    scanMatrix(matrix, 10, 10);
-
-
-    /* Print elements in matrix */
-    printf("Elements of %dx%d matrix.\n", 10, 10);
-    printMatrix(matrix, 10, 10);
-
-
-    return 0;
-}
-
-
-/**
- * Function to display elements of two dimensional array (matrix)
- * on console.
- *
- * @matrix  2D array to display as output.
- * @rows    Total rows in 2D matrix.
- * @cols    Total columns in 2D matrix.
- */
-void printMatrix(int (*matrix)[10], int rows, int cols)
-{
-    int i, j;
-
-
-    for (i = 0; i < 10; i++)
-    {
-        for (j = 0; j < 10; j++)
-        {
-            // *(*(matrix + i) + j) is equivalent to matrix[i][j]
-            printf("%d ", *(*(matrix + i) + j));
-        }
-
-        printf("\n");
-    }
+    int v1,v2;
+    scanf("%d", v1);
+    scanf("%d", v2);
+    return shortestPath2V(matrix,v1,v2);
 }
